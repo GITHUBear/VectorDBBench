@@ -33,6 +33,7 @@ class DB(Enum):
     Redis = "Redis"
     Chroma = "Chroma"
     AWSOpenSearch = "OpenSearch"
+    OceanBase = "OceanBase"
     Test = "test"
 
 
@@ -83,6 +84,10 @@ class DB(Enum):
             from .aws_opensearch.aws_opensearch import AWSOpenSearch
             return AWSOpenSearch
 
+        if self == DB.OceanBase:
+            from .oceanbase.oceanbase import OceanBase
+            return OceanBase
+
     @property
     def config_cls(self) -> Type[DBConfig]:
         """Import while in use"""
@@ -129,6 +134,10 @@ class DB(Enum):
         if self == DB.AWSOpenSearch:
             from .aws_opensearch.config import AWSOpenSearchConfig
             return AWSOpenSearchConfig
+        
+        if self == DB.OceanBase:
+            from .oceanbase.config import OceanBaseConfig
+            return OceanBaseConfig
 
     def case_config_cls(self, index_type: IndexType | None = None) -> Type[DBCaseConfig]:
         if self == DB.Milvus:
@@ -162,6 +171,10 @@ class DB(Enum):
         if self == DB.AWSOpenSearch:
             from .aws_opensearch.config import AWSOpenSearchIndexConfig
             return AWSOpenSearchIndexConfig
+        
+        if self == DB.OceanBase:
+            from .oceanbase.config import OceanBaseIndexConfig
+            return OceanBaseIndexConfig
 
         # DB.Pinecone, DB.Chroma, DB.Redis
         return EmptyDBCaseConfig

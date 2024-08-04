@@ -14,10 +14,10 @@ from vectordb_bench.backend.clients import DB
 
 class OceanBaseTypedDict(CommonTypedDict):
     host: Annotated[
-        str, click.option("--host", type=str, help="OceanBase host")
+        str, click.option("--host", type=str, help="OceanBase host", default="")
     ]
     unix_socket: Annotated[
-        str, click.option("--unix-sock", type=str, help="Unix socket file path")
+        str, click.option("--unix-sock", type=str, help="Unix socket file path", default="")
     ]
     user: Annotated[
         str, click.option("--user", type=str, help="OceanBase username", required=True)
@@ -28,14 +28,13 @@ class OceanBaseTypedDict(CommonTypedDict):
                      type=str,
                      help="OceanBase database password",
                      default=lambda: os.environ.get("OB_PASSWORD", ""),
-                     show_default="$OB_PASSWORD",
                      ),
     ]
     database: Annotated[
         str, click.option("--database", type=str, help="DataBase name", required=True)
     ]
     port: Annotated[
-        int, click.option("--port", type=int, help="OceanBase port", required=False)
+        int, click.option("--port", type=int, help="OceanBase port", required=True)
     ]
 
 class OceanBaseHNSWTypedDict(CommonTypedDict, OceanBaseTypedDict, HNSWFlavor3):

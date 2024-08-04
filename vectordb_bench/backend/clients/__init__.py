@@ -173,8 +173,8 @@ class DB(Enum):
             return AWSOpenSearchIndexConfig
         
         if self == DB.OceanBase:
-            from .oceanbase.config import OceanBaseIndexConfig
-            return OceanBaseIndexConfig
+            from .oceanbase.config import _oceanbase_case_config
+            return _oceanbase_case_config.get(IndexType.HNSW)
 
         # DB.Pinecone, DB.Chroma, DB.Redis
         return EmptyDBCaseConfig

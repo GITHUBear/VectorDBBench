@@ -1,5 +1,5 @@
 from typing import Any, Mapping, Optional, Sequence, TypedDict
-from pydantic import BaseModel, SecretStr
+from pydantic import BaseModel, SecretStr, validator
 from ..api import DBCaseConfig, DBConfig, IndexType, MetricType
 
 class OceanBaseConfigDict(TypedDict):
@@ -29,6 +29,14 @@ class OceanBaseConfig(DBConfig):
             "password": pwd_str,
             "database": self.database,
         }
+    
+    @validator("*")
+    def not_empty_field(cls, v, field):
+        if field.name in ["password", "unix_socket", "host", "db_label"]:
+            return v
+        if isinstance(v, (str, SecretStr)) and len(v) == 0:
+            raise ValueError("Empty string!")
+        return v
 
 class OceanBaseIndexConfig(BaseModel):
     metric_type: MetricType | None = None
@@ -47,7 +55,7 @@ class OceanBaseIndexConfig(BaseModel):
 class OceanBaseHNSWConfig(OceanBaseIndexConfig, DBCaseConfig):
     M: int
     efConstruction: int
-    efSearch: int | None = None
+    ef_search: int | None = None
     index: IndexType = IndexType.HNSW
 
     def index_param(self) -> dict:
@@ -61,7 +69,7 @@ class OceanBaseHNSWConfig(OceanBaseIndexConfig, DBCaseConfig):
     def search_param(self) -> dict:
         return {
             "metric_type": self.parse_metric_func_str(),
-            "params": { "ef_search": self.efSearch }
+            "params": { "ef_search": self.ef_search }
         }
     
 _oceanbase_case_config = {

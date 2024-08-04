@@ -190,6 +190,17 @@ CaseConfigParamInput_IndexType_PgVector = CaseConfigInput(
     },
 )
 
+CaseConfigParamInput_IndexType_OceanBase = CaseConfigInput(
+    label=CaseConfigParamType.IndexType,
+    inputHelp="Select Index Type",
+    inputType=InputType.Option,
+    inputConfig={
+        "options": [
+            IndexType.HNSW.value,
+        ],
+    },
+)
+
 CaseConfigParamInput_M = CaseConfigInput(
     label=CaseConfigParamType.M,
     inputType=InputType.Number,
@@ -729,6 +740,19 @@ ZillizCloudPerformanceConfig = [
     CaseConfigParamInput_ZillizLevel,
 ]
 
+OceanBaseLoadingConfig = [
+    CaseConfigParamInput_IndexType_OceanBase,
+    CaseConfigParamInput_M,
+    CaseConfigParamInput_EFConstruction_Milvus,
+]
+
+OceanBasePerformanceConfig = [
+    CaseConfigParamInput_IndexType_OceanBase,
+    CaseConfigParamInput_M,
+    CaseConfigParamInput_EFConstruction_Milvus,
+    CaseConfigParamInput_EFSearch_PgVector,
+]
+
 CASE_CONFIG_MAP = {
     DB.Milvus: {
         CaseLabel.Load: MilvusLoadConfig,
@@ -753,4 +777,8 @@ CASE_CONFIG_MAP = {
         CaseLabel.Load: PgVectoRSLoadingConfig,
         CaseLabel.Performance: PgVectoRSPerformanceConfig,
     },
+    DB.OceanBase: {
+        CaseLabel.Load: OceanBaseLoadingConfig,
+        CaseLabel.Performance: OceanBasePerformanceConfig,
+    }
 }

@@ -77,7 +77,7 @@ class OceanBase(VectorDB):
             self._cursor = self._conn.cursor()
             self._cursor.execute("SET autocommit=1")
             if self.db_case_config.index == IndexType.HNSW:
-                self._cursor.execute(f"SET ob_hnsw_ef_search={(self.db_case_config.search_param())["params"]["ef_search"]}")
+                self._cursor.execute(f"SET ob_hnsw_ef_search={(self.db_case_config.search_param())['params']['ef_search']}")
             else:
                 raise ValueError("Index type is not supported")
             
@@ -103,8 +103,9 @@ class OceanBase(VectorDB):
         
         log.info(f"{self.name} client create table: {self.table_name}")
         idx_param = self.db_case_config.index_param()
+        idx_args_str = ','.join([f"{k}={v}" for k, v in idx_param["params"].items()])
         self._cursor.execute(
-            f"CREATE TABLE {self.table_name} (id INT, embedding vector({self.dim}), primary key(id), vector index idx1(embedding) with(distance={idx_param["metric_type"]}, type={idx_param["index_type"]}, lib={idx_param["lib"]}, {','.join([f"{k}={v}" for k, v in idx_param["params"].items()])}))"
+            f"CREATE TABLE {self.table_name} (id INT, embedding vector({self.dim}), primary key(id), vector index idx1(embedding) with(distance={idx_param['metric_type']}, type={idx_param['index_type']}, lib={idx_param['lib']}, {idx_args_str}))"
         )
 
     def ready_to_load(self):

@@ -39,6 +39,7 @@ dependencies = [
     "pydantic<v2",
     "scikit-learn",
     "pymilvus", # with pandas, numpy, ujson
+    "mysql-connector-python"
 ]
 dynamic = ["version"]
 
@@ -76,6 +77,7 @@ redis = [ "redis" ]
 chromadb = [ "chromadb" ]
 awsopensearch = [ "awsopensearch" ]
 zilliz_cloud = []
+oceanbase = []
 
 [project.urls]
 "repository" = "https://github.com/zilliztech/VectorDBBench"

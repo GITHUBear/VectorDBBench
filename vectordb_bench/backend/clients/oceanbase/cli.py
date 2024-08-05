@@ -16,8 +16,8 @@ class OceanBaseTypedDict(CommonTypedDict):
     host: Annotated[
         str, click.option("--host", type=str, help="OceanBase host", default="")
     ]
-    unix_socket: Annotated[
-        str, click.option("--unix-sock", type=str, help="Unix socket file path", default="")
+    unixsock: Annotated[
+        str, click.option("--unixsock", type=str, help="Unix socket file path", default="")
     ]
     user: Annotated[
         str, click.option("--user", type=str, help="OceanBase username", required=True)
@@ -51,7 +51,7 @@ def OceanBaseHNSW(**parameters: Unpack[OceanBaseHNSWTypedDict]):
             db_label=parameters["db_label"],
             user=SecretStr(parameters["user"]),
             password=SecretStr(parameters["password"]),
-            unix_socket=parameters["unix_socket"],
+            unix_socket=parameters["unixsock"],
             host=parameters["host"],
             port=parameters["port"],
             database=parameters["database"],
@@ -59,7 +59,7 @@ def OceanBaseHNSW(**parameters: Unpack[OceanBaseHNSWTypedDict]):
         db_case_config=OceanBaseHNSWConfig(
             M=parameters["m"],
             efConstruction=parameters["ef_construction"],
-            efSearch=parameters["ef_search"],
+            ef_search=parameters["ef_search"],
         ),
         **parameters,
     )

@@ -129,8 +129,8 @@ class OceanBase(VectorDB):
         insert_count = 0
         try:
             for batch_start_offset in range(0, len(embeddings), self.load_batch_size):
-                batch_end_offset = min(batch_start_offset + self.batch_size, len(embeddings))
-                values_str = ",".join([f"({id}, {struct.pack('f' * len(vec), *vec).hex()})" for id, vec in zip(metadata[batch_start_offset : batch_end_offset], embeddings[batch_start_offset : batch_end_offset])])
+                batch_end_offset = min(batch_start_offset + self.load_batch_size, len(embeddings))
+                values_str = ",".join([f"({id}, 0x{struct.pack('f' * len(vec), *vec).hex()})" for id, vec in zip(metadata[batch_start_offset : batch_end_offset], embeddings[batch_start_offset : batch_end_offset])])
                 self._cursor.execute(f"insert into {self.table_name} values {values_str}")
                 insert_count += (batch_end_offset - batch_start_offset)
         except mysql.Error as e:
